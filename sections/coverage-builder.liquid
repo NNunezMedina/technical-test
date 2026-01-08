@@ -87,7 +87,6 @@
     #{{ section.id }} .cb-radio input {
     position: absolute;
     opacity: 0;
-    pointer-events: none;
     }
 
     #{{ section.id }} .cb-radio:hover {
@@ -114,6 +113,17 @@
     margin-bottom: 12px;
     border-radius: 12px;
     display: block;
+    }
+
+    #{{ section.id }} .cb-radio[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    }
+
+    #{{ section.id }} .cb-radio[aria-disabled="true"]:hover {
+    background: transparent;
+    color: inherit;
+    border-color: rgba(0,0,0,0.14);
     }
 
   @media (max-width: 768px) {
@@ -172,12 +182,8 @@
       <div class="cb-grid">
         <div class="cb-col cb-left">
             {% assign first_rule = section.blocks | where: "type", "rule" | first %}
-            {% assign rec_product = nil %}
+            {% assign rec_product = first_rule.settings.product %}
             {% assign rec_variant = nil %}
-
-            {% if first_rule and first_rule.settings.product != blank %}
-            {% assign rec_product = all_products[first_rule.settings.product] %}
-            {% endif %}
 
             {% if rec_product %}
             {% if first_rule.settings.variant_title != blank %}
@@ -190,7 +196,6 @@
             {% endif %}
             {% endfor %}
             {% endif %}
-
             {% unless rec_variant %}
                 {% assign rec_variant = rec_product.selected_or_first_available_variant %}
             {% endunless %}
@@ -198,10 +203,9 @@
         <div class="cb-rec" data-rec>
             {% if rec_product and rec_variant %}
             <p class="cb-kicker">Recommended</p>
-
             {% if rec_product.featured_image %}
                 <img
-                class="cb-rec-image"
+                class="cb-rec-image" data-rec-image
                 src="{{ rec_product.featured_image | image_url: width: 600 }}"
                 alt="{{ rec_product.featured_image.alt | escape }}"
                 width="{{ rec_product.featured_image.width }}"
@@ -209,12 +213,12 @@
                 loading="lazy"
                 >
             {% endif %}
-
-            <h3 class="cb-rec-title">{{ rec_product.title }}</h3>
-            <p class="cb-rec-price">{{ rec_variant.price | money }}</p>
-
-            {% if first_rule.settings.short_copy != blank %}
-                <p class="cb-rec-copy">{{ first_rule.settings.short_copy }}</p>
+            <h3 class="cb-rec-title" data-rec-title>{{ rec_product.title }}</h3>
+            <p class="cb-rec-price" data-rec-price>{{ rec_variant.price | money }}</p>
+            {% if rec_product.description != blank %}
+            <div class="cb-rec-copy" data-rec-desc>
+            {{ rec_product.description | strip_html | truncate: 180 }}
+            </div>
             {% endif %}
             {% else %}
             {{ section.settings.left_col_text }}
@@ -223,17 +227,18 @@
         </div>
         <div class="cb-col cb-right">
         <fieldset class="cb-fieldset">
-            <legend class="cb-legend">{{ section.settings.step1_label }}</legend>
-            <div class="cb-row">
+        <legend class="cb-legend">{{ section.settings.step1_label }}</legend>
+        <div class="cb-row">
             <label class="cb-radio">
-                <input type="radio" name="trip_type_{{ section.id }}" value="single" checked>
-                <span>{{ section.settings.trip_type_single_label }}</span>
+            <input type="radio" name="trip_type_{{ section.id }}" value="single" checked>
+            <span>{{ section.settings.trip_type_single_label }}</span>
             </label>
+
             <label class="cb-radio">
-                <input type="radio" name="trip_type_{{ section.id }}" value="multi">
-                <span>{{ section.settings.trip_type_multi_label }}</span>
+            <input type="radio" name="trip_type_{{ section.id }}" value="multi">
+            <span>{{ section.settings.trip_type_multi_label }}</span>
             </label>
-            </div>
+        </div>
         </fieldset>
 
         <fieldset class="cb-fieldset">
@@ -266,16 +271,187 @@
                 <span>{{ section.settings.coverage_premium_label }}</span>
             </label>
             <label class="cb-radio">
-                <input type="radio" name="coverage_{{ section.id }}" value="max">
-                <span>{{ section.settings.coverage_max_label }}</span>
+            <input type="radio" name="coverage_{{ section.id }}" value="max" data-coverage-max>
+            <span>{{ section.settings.coverage_max_label }}</span>
             </label>
             </div>
         </fieldset>
         </div>
+        {%- comment -%} Coverage Builder rules (data only, hidden) {%- endcomment -%}
+        <div class="cb-rules" hidden>
+        {% for b in section.blocks %}
+            {% if b.type == 'rule' and b.settings.product != blank %}
+            {% assign p = b.settings.product %}
+
+            {% assign vv = nil %}
+            {% if b.settings.variant_title != blank %}
+                {% assign target = b.settings.variant_title | downcase | strip %}
+                {% for v in p.variants %}
+                {% assign v_title = v.title | downcase | strip %}
+                {% if v_title == target %}
+                    {% assign vv = v %}
+                    {% break %}
+                {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% unless vv %}
+                {% assign vv = p.selected_or_first_available_variant %}
+            {% endunless %}
+
+            <div
+                data-rule
+                data-default="{% if b.settings.is_default %}true{% else %}false{% endif %}"
+                data-trip-type="{{ b.settings.trip_type }}"
+                data-trip-cost="{{ b.settings.trip_cost }}"
+                data-coverage="{{ b.settings.coverage }}"
+                data-title="{{ p.title | escape }}"
+                data-url="{{ p.url }}"
+                data-image="{% if p.featured_image %}{{ p.featured_image | image_url: width: 600 }}{% endif %}"
+                data-price="{{ vv.price | money | escape }}"
+                data-description="{{ p.description | strip_html | truncate: 180 | escape }}"
+            ></div>
+            {% endif %}
+        {% endfor %}
+        </div>
+
         </div>
     </div>
   </div>
 </section>
+
+<script>
+(() => {
+  const root = document.getElementById('{{ section.id }}');
+  if (!root) return;
+
+  const rules = Array.from(root.querySelectorAll('[data-rule]'));
+  if (!rules.length) return;
+
+  const els = {
+    title: root.querySelector('[data-rec-title]'),
+    price: root.querySelector('[data-rec-price]'),
+    desc:  root.querySelector('[data-rec-desc]'),
+    img:   root.querySelector('[data-rec-image]'),
+  };
+
+  const getValue = (name) => root.querySelector(`input[name="${name}"]:checked`)?.value;
+
+  const radios = {
+  tripSingle: root.querySelector(`input[name="trip_type_{{ section.id }}"][value="single"]`),
+  tripMulti:  root.querySelector(`input[name="trip_type_{{ section.id }}"][value="multi"]`),
+  max:        root.querySelector(`input[name="coverage_{{ section.id }}"][value="max"]`),
+  premium:    root.querySelector(`input[name="coverage_{{ section.id }}"][value="premium"]`),
+  standard:   root.querySelector(`input[name="coverage_{{ section.id }}"][value="standard"]`)
+};
+
+const setDisabled = (input, disabled) => {
+  if (!input) return;
+  input.disabled = disabled;
+
+  const label = input.closest('.cb-radio');
+  if (label) label.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+};
+
+const setRadio = (name, value) => {
+  const input = root.querySelector(`input[name="${name}"][value="${value}"]`);
+  if (input && !input.checked) input.checked = true;
+};
+
+const applyDefaultRuleIfAny = () => {
+  const def = rules.find(r => r.dataset.default === 'true');
+  if (!def) return;
+
+  setRadio(`trip_type_{{ section.id }}`, def.dataset.tripType);
+  // si tu rule usa trip_cost = any como default, NO lo marques en radios
+  if (def.dataset.tripCost && def.dataset.tripCost !== 'any') {
+    setRadio(`trip_cost_{{ section.id }}`, def.dataset.tripCost);
+  }
+  setRadio(`coverage_{{ section.id }}`, def.dataset.coverage);
+};
+
+  const pickRule = ({ tripType, tripCost, coverage }) => {
+    const exact = rules.find(r =>
+      r.dataset.tripType === tripType &&
+      r.dataset.tripCost === tripCost &&
+      r.dataset.coverage  === coverage
+    );
+    if (exact) return exact;
+
+    // wildcard trip_cost = any
+    const anyCost = rules.find(r =>
+      r.dataset.tripType === tripType &&
+      r.dataset.tripCost === 'any' &&
+      r.dataset.coverage  === coverage
+    );
+    if (anyCost) return anyCost;
+
+    // coverage fallback: max -> premium -> standard
+    if (coverage === 'max') {
+      return pickRule({ tripType, tripCost, coverage: 'premium' })
+          || pickRule({ tripType, tripCost, coverage: 'standard' });
+    }
+    if (coverage === 'premium') {
+      return pickRule({ tripType, tripCost, coverage: 'standard' });
+    }
+
+    // último fallback
+    return rules[0] || null;
+  };
+
+  const render = (rule) => {
+    if (!rule) return;
+
+    if (els.title) els.title.textContent = rule.dataset.title || '';
+    if (els.price) els.price.textContent = rule.dataset.price || '';
+    if (els.desc)  els.desc.textContent  = rule.dataset.description || '';
+
+    if (els.img) {
+      const src = rule.dataset.image;
+      if (src) {
+        els.img.src = src;
+        els.img.hidden = false;
+      } else {
+        els.img.hidden = true;
+      }
+    }
+
+    // si luego agregas CTA, aquí guardas URL
+    root.querySelector('[data-rec]')?.setAttribute('data-url', rule.dataset.url || '');
+  };
+
+  const syncMaxAvailability = () => {
+  const tripType =
+    root.querySelector(`input[name="trip_type_{{ section.id }}"]:checked`)?.value || 'single';
+
+  const isSingle = tripType === 'single';
+
+  // desactivar Max si es single
+  setDisabled(radios.max, isSingle);
+
+  // si estaba seleccionado Max y ahora es single → fallback
+  if (isSingle && radios.max?.checked) {
+    (radios.premium || radios.standard)?.click();
+  }
+};
+
+  const update = () => {
+    syncMaxAvailability();
+    const tripType = getValue('trip_type_{{ section.id }}') || 'single';
+    const tripCost = getValue('trip_cost_{{ section.id }}') || 'lt500';
+    const coverage = getValue('coverage_{{ section.id }}') || 'standard';
+
+    const rule = pickRule({ tripType, tripCost, coverage });
+    render(rule);
+  };
+
+  root.addEventListener('change', (e) => {
+    if (e.target?.matches('input[type="radio"]')) update();
+  });
+
+  applyDefaultRuleIfAny();
+  update();
+})();
+</script>
 
 {% schema %}
 {
@@ -384,17 +560,50 @@
     "type": "rule",
     "name": "Mapping rule",
     "settings": [
+        {
+      "type": "checkbox",
+      "id": "is_default",
+      "label": "Set as default on load",
+      "default": false
+    },
+      {
+        "type": "select",
+        "id": "trip_type",
+        "label": "Trip Type",
+        "default": "single",
+        "options": [
+          { "value": "single", "label": "Single trip" },
+          { "value": "multi", "label": "Multi-trip" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "trip_cost",
+        "label": "Trip Cost Range",
+        "default": "any",
+        "options": [
+            { "value": "any", "label": "Any" },
+            { "value": "lt500", "label": "< €500" },
+            { "value": "500_1500", "label": "€500–€1500" },
+            { "value": "gt1500", "label": "> €1500" }
+        ]
+        },
+      {
+        "type": "select",
+        "id": "coverage",
+        "label": "Coverage Level",
+        "default": "standard",
+        "options": [
+          { "value": "standard", "label": "Standard" },
+          { "value": "premium", "label": "Premium" },
+          { "value": "max", "label": "Max" }
+        ]
+      },
       { "type": "product", "id": "product", "label": "Recommended product" },
-      { "type": "text", "id": "variant_title", "label": "Variant title (optional)","default": "Standard" },
-      { "type": "text", "id": "short_copy", "label": "Short copy", "default": "Short copy" }
-    ]
+      { "type": "text", "id": "variant_title", "label": "Variant title (optional)" }
+        ]
     }
     ],
-    "max_blocks": 20,
-  "presets": [
-    {
-      "name": "Coverage Builder"
-    }
-  ]
+    "max_blocks": 50
 }
 {% endschema %}

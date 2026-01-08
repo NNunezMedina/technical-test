@@ -79,17 +79,116 @@
     "coverage_builder_igN8a4": {
       "type": "coverage-builder",
       "blocks": {
-        "rule_7b9hcG": {
+        "rule_nWGmFL": {
           "type": "rule",
           "settings": {
+            "is_default": false,
+            "trip_type": "single",
+            "trip_cost": "gt1500",
+            "coverage": "premium",
+            "product": "trip-cancellation-insurance",
+            "variant_title": "premium"
+          }
+        },
+        "rule_f4E8Wt": {
+          "type": "rule",
+          "settings": {
+            "is_default": false,
+            "trip_type": "single",
+            "trip_cost": "gt1500",
+            "coverage": "standard",
+            "product": "trip-cancellation-insurance",
+            "variant_title": "standard"
+          }
+        },
+        "rule_7iaVUQ": {
+          "type": "rule",
+          "settings": {
+            "is_default": false,
+            "trip_type": "single",
+            "trip_cost": "500_1500",
+            "coverage": "premium",
+            "product": "trip-cancellation-insurance",
+            "variant_title": "premium"
+          }
+        },
+        "rule_TVb47Y": {
+          "type": "rule",
+          "settings": {
+            "is_default": false,
+            "trip_type": "single",
+            "trip_cost": "500_1500",
+            "coverage": "standard",
+            "product": "trip-cancellation-insurance",
+            "variant_title": "standard"
+          }
+        },
+        "rule_Uqabde": {
+          "type": "rule",
+          "settings": {
+            "is_default": false,
+            "trip_type": "single",
+            "trip_cost": "lt500",
+            "coverage": "premium",
+            "product": "flight-delay-coverage",
+            "variant_title": "premium"
+          }
+        },
+        "rule_bMwRBt": {
+          "type": "rule",
+          "settings": {
+            "is_default": true,
+            "trip_type": "single",
+            "trip_cost": "lt500",
+            "coverage": "standard",
+            "product": "flight-delay-coverage",
+            "variant_title": "standard"
+          }
+        },
+        "rule_ya9c8C": {
+          "type": "rule",
+          "settings": {
+            "is_default": false,
+            "trip_type": "multi",
+            "trip_cost": "any",
+            "coverage": "max",
             "product": "annual-multi-trip-insurance",
-            "variant_title": "max",
-            "short_copy": "Short copy"
+            "variant_title": "max"
+          }
+        },
+        "rule_UUpyPY": {
+          "type": "rule",
+          "settings": {
+            "is_default": false,
+            "trip_type": "multi",
+            "trip_cost": "any",
+            "coverage": "standard",
+            "product": "annual-multi-trip-insurance",
+            "variant_title": "standard"
+          }
+        },
+        "rule_8E9KGd": {
+          "type": "rule",
+          "settings": {
+            "is_default": false,
+            "trip_type": "multi",
+            "trip_cost": "any",
+            "coverage": "premium",
+            "product": "annual-multi-trip-insurance",
+            "variant_title": "premium"
           }
         }
       },
       "block_order": [
-        "rule_7b9hcG"
+        "rule_nWGmFL",
+        "rule_f4E8Wt",
+        "rule_7iaVUQ",
+        "rule_TVb47Y",
+        "rule_Uqabde",
+        "rule_bMwRBt",
+        "rule_ya9c8C",
+        "rule_UUpyPY",
+        "rule_8E9KGd"
       ],
       "name": "Coverage Builder",
       "settings": {
