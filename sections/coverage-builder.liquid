@@ -126,6 +126,22 @@
     border-color: rgba(0,0,0,0.14);
     }
 
+    #{{ section.id }} .cb-atc { margin-top: 14px; }
+    #{{ section.id }} .cb-atc-btn{
+    width:100%;
+    padding:12px 14px;
+    border-radius: 12px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 600;
+    background: {{ section.settings.selector_active_color }};
+    color: #fff;
+    }
+    #{{ section.id }} .cb-atc-btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+    }
+
   @media (max-width: 768px) {
     #{{ section.id }} .cb-card {
       padding: 18px;
@@ -219,6 +235,14 @@
             <div class="cb-rec-copy" data-rec-desc>
             {{ rec_product.description | strip_html | truncate: 180 }}
             </div>
+            <form method="post" action="/cart/add" class="cb-atc" data-atc-form>
+            <input type="hidden" name="id" value="{{ rec_variant.id }}" data-atc-variant>
+            <input type="hidden" name="quantity" value="1">
+
+            <button type="submit" class="cb-atc-btn" data-atc-btn>
+                Add to cart
+            </button>
+            </form>
             {% endif %}
             {% else %}
             {{ section.settings.left_col_text }}
@@ -308,6 +332,7 @@
                 data-url="{{ p.url }}"
                 data-image="{% if p.featured_image %}{{ p.featured_image | image_url: width: 600 }}{% endif %}"
                 data-price="{{ vv.price | money | escape }}"
+                data-variant-id="{{ vv.id }}"
                 data-description="{{ p.description | strip_html | truncate: 180 | escape }}"
             ></div>
             {% endif %}
@@ -328,11 +353,13 @@
   if (!rules.length) return;
 
   const els = {
-    title: root.querySelector('[data-rec-title]'),
-    price: root.querySelector('[data-rec-price]'),
-    desc:  root.querySelector('[data-rec-desc]'),
-    img:   root.querySelector('[data-rec-image]'),
-  };
+  title: root.querySelector('[data-rec-title]'),
+  price: root.querySelector('[data-rec-price]'),
+  desc:  root.querySelector('[data-rec-desc]'),
+  img:   root.querySelector('[data-rec-image]'),
+  variantInput: root.querySelector('[data-atc-variant]'),
+  atcBtn: root.querySelector('[data-atc-btn]'),
+};
 
   const getValue = (name) => root.querySelector(`input[name="${name}"]:checked`)?.value;
 
@@ -404,6 +431,12 @@ const applyDefaultRuleIfAny = () => {
     if (els.title) els.title.textContent = rule.dataset.title || '';
     if (els.price) els.price.textContent = rule.dataset.price || '';
     if (els.desc)  els.desc.textContent  = rule.dataset.description || '';
+    if (els.variantInput) {
+    els.variantInput.value = rule.dataset.variantId || '';
+    }
+    if (els.atcBtn) {
+    els.atcBtn.disabled = !rule.dataset.variantId;
+    }
 
     if (els.img) {
       const src = rule.dataset.image;
