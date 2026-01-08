@@ -1,0 +1,186 @@
+<style>
+  #{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background: {{ section.settings.background_color }};
+  }
+
+  #{{ section.id }} .cb-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  #{{ section.id }} .cb-card {
+    background: {{ section.settings.card_bg_color }};
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+  }
+
+    #{{ section.id }} .cb-head {
+    text-align: {{ section.settings.heading_alignment }};
+    }
+
+  #{{ section.id }} .cb-title {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.2;
+    color: {{ section.settings.text_color }};
+  }
+
+  #{{ section.id }} .cb-subtitle {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: {{ section.settings.text_color }};
+    opacity: 0.85;
+  }
+
+  #{{ section.id }} .cb-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  #{{ section.id }} .cb-col {
+    border: 1px dashed rgba(0,0,0,0.15);
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 160px;
+  }
+
+  @media (max-width: 768px) {
+    #{{ section.id }} .cb-card {
+      padding: 18px;
+    }
+
+    #{{ section.id }} .cb-title {
+      font-size: 22px;
+    }
+
+    #{{ section.id }} .cb-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<section id="{{ section.id }}">
+  <div class="cb-wrapper">
+    <div class="cb-card">
+      <div class="cb-head">
+            {% if section.settings.title != blank %}
+            <h2 class="cb-title">{{ section.settings.title }}</h2>
+            {% endif %}
+
+            {% if section.settings.subtitle != blank %}
+            <p class="cb-subtitle">{{ section.settings.subtitle }}</p>
+            {% endif %}
+        </div>
+
+      <div class="cb-grid">
+        <div class="cb-col">
+            {{ section.settings.left_col_text }}
+        </div>
+        <div class="cb-col">
+            {{ section.settings.right_col_text }}
+        </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Coverage Builder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Find the best coverage for your trip"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Answer a few questions to get the ideal travel protection."
+    },
+    {
+    "type": "select",
+    "id": "heading_alignment",
+    "label": "Title & subtitle alignment",
+    "default": "left",
+    "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+    ]
+    },
+    {
+    "type": "textarea",
+    "id": "left_col_text",
+    "label": "Left column text",
+    "default": "Recommended plan content goes here."
+    },
+    {
+    "type": "textarea",
+    "id": "right_col_text",
+    "label": "Right column text",
+    "default": "Selectors / inputs will go here."
+    },
+    {
+      "type": "header",
+      "content": "Styles"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f7f4ef"
+    },
+    {
+    "type": "color",
+    "id": "card_bg_color",
+    "label": "Card background color",
+    "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coverage Builder"
+    }
+  ]
+}
+{% endschema %}
