@@ -51,6 +51,63 @@
     min-height: 160px;
   }
 
+  #{{ section.id }} .cb-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 16px;
+    }
+
+    #{{ section.id }} .cb-legend {
+    font-size: 14px;
+    margin: 0 0 10px;
+    color: {{ section.settings.text_color }};
+    font-weight: 600;
+    }
+
+    #{{ section.id }} .cb-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    }
+
+    #{{ section.id }} .cb-radio {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.14);
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+
+    /* hide native radio */
+    #{{ section.id }} .cb-radio input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    }
+
+    #{{ section.id }} .cb-radio:hover {
+    border-color: rgba(0,0,0,0.28);
+    background: {{ section.settings.selector_active_color }};
+    color:white;
+    }
+
+    /* selected state */
+    #{{ section.id }} .cb-radio:has(input:checked) {
+    border-color: rgba(0,0,0,0.45);
+    background: {{ section.settings.selector_active_color }};
+    color:white;
+    }
+
+    /* optional: text weight when selected */
+    #{{ section.id }} .cb-radio:has(input:checked) span {
+    font-weight: 600;
+    }
+
   @media (max-width: 768px) {
     #{{ section.id }} .cb-card {
       padding: 18px;
@@ -61,7 +118,15 @@
     }
 
     #{{ section.id }} .cb-grid {
-      grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    }
+
+    #{{ section.id }} .cb-left { order: 2; }
+    #{{ section.id }} .cb-right { order: 1; }
+
+    #{{ section.id }} .cb-radio {
+    padding:4px 10px;
     }
   }
 </style>
@@ -69,6 +134,7 @@
 <section id="{{ section.id }}">
   <div class="cb-wrapper">
     <div class="cb-card">
+        {% if section.settings.title != blank or section.settings.subtitle != blank %}
       <div class="cb-head">
             {% if section.settings.title != blank %}
             <h2 class="cb-title">{{ section.settings.title }}</h2>
@@ -78,13 +144,62 @@
             <p class="cb-subtitle">{{ section.settings.subtitle }}</p>
             {% endif %}
         </div>
+        {% endif %}
 
       <div class="cb-grid">
-        <div class="cb-col">
-            {{ section.settings.left_col_text }}
+        <div class="cb-col cb-left">
+        {{ section.settings.left_col_text }}
         </div>
-        <div class="cb-col">
-            {{ section.settings.right_col_text }}
+        <div class="cb-col cb-right">
+        <fieldset class="cb-fieldset">
+            <legend class="cb-legend">{{ section.settings.step1_label }}</legend>
+            <div class="cb-row">
+            <label class="cb-radio">
+                <input type="radio" name="trip_type_{{ section.id }}" value="single" checked>
+                <span>{{ section.settings.trip_type_single_label }}</span>
+            </label>
+            <label class="cb-radio">
+                <input type="radio" name="trip_type_{{ section.id }}" value="multi">
+                <span>{{ section.settings.trip_type_multi_label }}</span>
+            </label>
+            </div>
+        </fieldset>
+
+        <fieldset class="cb-fieldset">
+            <legend class="cb-legend">{{ section.settings.step2_label }}</legend>
+            <div class="cb-row">
+            <label class="cb-radio">
+                <input type="radio" name="trip_cost_{{ section.id }}" value="lt500" checked>
+                <span>&lt;€500</span>
+            </label>
+            <label class="cb-radio">
+                <input type="radio" name="trip_cost_{{ section.id }}" value="500_1500">
+                <span>€500–€1500</span>
+            </label>
+            <label class="cb-radio">
+                <input type="radio" name="trip_cost_{{ section.id }}" value="gt1500">
+                <span>&gt;€1500</span>
+            </label>
+            </div>
+        </fieldset>
+
+        <fieldset class="cb-fieldset">
+            <legend class="cb-legend">{{ section.settings.step3_label }}</legend>
+            <div class="cb-row">
+            <label class="cb-radio">
+                <input type="radio" name="coverage_{{ section.id }}" value="standard" checked>
+                <span>{{ section.settings.coverage_standard_label }}</span>
+            </label>
+            <label class="cb-radio">
+                <input type="radio" name="coverage_{{ section.id }}" value="premium">
+                <span>{{ section.settings.coverage_premium_label }}</span>
+            </label>
+            <label class="cb-radio">
+                <input type="radio" name="coverage_{{ section.id }}" value="max">
+                <span>{{ section.settings.coverage_max_label }}</span>
+            </label>
+            </div>
+        </fieldset>
         </div>
         </div>
     </div>
@@ -131,6 +246,20 @@
     "default": "Selectors / inputs will go here."
     },
     {
+    "type": "header",
+    "content": "Coverage Builder Steps"
+    },
+    { "type": "text", "id": "step1_label", "label": "Step 1 label", "default": "Trip Type" },
+    { "type": "text", "id": "trip_type_single_label", "label": "Single trip label", "default": "Single trip" },
+    { "type": "text", "id": "trip_type_multi_label", "label": "Multi-trip label", "default": "Multi-trip" },
+
+    { "type": "text", "id": "step2_label", "label": "Step 2 label", "default": "Trip Cost Range" },
+
+    { "type": "text", "id": "step3_label", "label": "Step 3 label", "default": "Coverage Level" },
+    { "type": "text", "id": "coverage_standard_label", "label": "Standard label", "default": "Standard" },
+    { "type": "text", "id": "coverage_premium_label", "label": "Premium label", "default": "Premium" },
+    { "type": "text", "id": "coverage_max_label", "label": "Max label", "default": "Max" },
+    {
       "type": "header",
       "content": "Styles"
     },
@@ -151,6 +280,12 @@
       "id": "text_color",
       "label": "Text color",
       "default": "#111111"
+    },
+    {
+    "type": "color",
+    "id": "selector_active_color",
+    "label": "Selector active color",
+    "default": "#1e5bff"
     },
     {
       "type": "header",
