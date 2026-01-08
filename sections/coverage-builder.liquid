@@ -108,6 +108,14 @@
     font-weight: 600;
     }
 
+    #{{ section.id }} .cb-rec-image {
+    width: 100%;
+    height:auto;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    display: block;
+    }
+
   @media (max-width: 768px) {
     #{{ section.id }} .cb-card {
       padding: 18px;
@@ -122,11 +130,26 @@
     flex-direction: column;
     }
 
-    #{{ section.id }} .cb-left { order: 2; }
-    #{{ section.id }} .cb-right { order: 1; }
+    #{{ section.id }} 
+    .cb-left { order: 2; 
+    }
+
+    #{{ section.id }} .cb-right 
+    { order: 1; 
+    }
 
     #{{ section.id }} .cb-radio {
     padding:4px 10px;
+    }
+
+    #{{ section.id }} .cb-kicker 
+    { margin: 0 0 8px; font-size: 12px; opacity: .7; 
+    }
+    #{{ section.id }} .cb-rec-title 
+    { margin: 0 0 8px; font-size: 18px; 
+    }
+    #{{ section.id }} .cb-rec-price 
+    { margin: 0; font-weight: 600; 
     }
   }
 </style>
@@ -148,7 +171,55 @@
 
       <div class="cb-grid">
         <div class="cb-col cb-left">
-        {{ section.settings.left_col_text }}
+            {% assign first_rule = section.blocks | where: "type", "rule" | first %}
+            {% assign rec_product = nil %}
+            {% assign rec_variant = nil %}
+
+            {% if first_rule and first_rule.settings.product != blank %}
+            {% assign rec_product = all_products[first_rule.settings.product] %}
+            {% endif %}
+
+            {% if rec_product %}
+            {% if first_rule.settings.variant_title != blank %}
+                {% assign target_variant_title = first_rule.settings.variant_title | downcase | strip %}
+            {% for v in rec_product.variants %}
+            {% assign v_title = v.title | downcase | strip %}
+            {% if v_title == target_variant_title %}
+                {% assign rec_variant = v %}
+                {% break %}
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            {% unless rec_variant %}
+                {% assign rec_variant = rec_product.selected_or_first_available_variant %}
+            {% endunless %}
+            {% endif %}
+        <div class="cb-rec" data-rec>
+            {% if rec_product and rec_variant %}
+            <p class="cb-kicker">Recommended</p>
+
+            {% if rec_product.featured_image %}
+                <img
+                class="cb-rec-image"
+                src="{{ rec_product.featured_image | image_url: width: 600 }}"
+                alt="{{ rec_product.featured_image.alt | escape }}"
+                width="{{ rec_product.featured_image.width }}"
+                height="{{ rec_product.featured_image.height }}"
+                loading="lazy"
+                >
+            {% endif %}
+
+            <h3 class="cb-rec-title">{{ rec_product.title }}</h3>
+            <p class="cb-rec-price">{{ rec_variant.price | money }}</p>
+
+            {% if first_rule.settings.short_copy != blank %}
+                <p class="cb-rec-copy">{{ first_rule.settings.short_copy }}</p>
+            {% endif %}
+            {% else %}
+            {{ section.settings.left_col_text }}
+            {% endif %}
+        </div>
         </div>
         <div class="cb-col cb-right">
         <fieldset class="cb-fieldset">
@@ -245,10 +316,6 @@
     "label": "Right column text",
     "default": "Selectors / inputs will go here."
     },
-    {
-    "type": "header",
-    "content": "Coverage Builder Steps"
-    },
     { "type": "text", "id": "step1_label", "label": "Step 1 label", "default": "Trip Type" },
     { "type": "text", "id": "trip_type_single_label", "label": "Single trip label", "default": "Single trip" },
     { "type": "text", "id": "trip_type_multi_label", "label": "Multi-trip label", "default": "Multi-trip" },
@@ -312,6 +379,18 @@
       "unit": "px"
     }
   ],
+  "blocks": [
+  {
+    "type": "rule",
+    "name": "Mapping rule",
+    "settings": [
+      { "type": "product", "id": "product", "label": "Recommended product" },
+      { "type": "text", "id": "variant_title", "label": "Variant title (optional)","default": "Standard" },
+      { "type": "text", "id": "short_copy", "label": "Short copy", "default": "Short copy" }
+    ]
+    }
+    ],
+    "max_blocks": 20,
   "presets": [
     {
       "name": "Coverage Builder"

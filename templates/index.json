@@ -78,6 +78,19 @@
     },
     "coverage_builder_igN8a4": {
       "type": "coverage-builder",
+      "blocks": {
+        "rule_7b9hcG": {
+          "type": "rule",
+          "settings": {
+            "product": "annual-multi-trip-insurance",
+            "variant_title": "max",
+            "short_copy": "Short copy"
+          }
+        }
+      },
+      "block_order": [
+        "rule_7b9hcG"
+      ],
       "name": "Coverage Builder",
       "settings": {
         "title": "Find the best coverage for your trip",
