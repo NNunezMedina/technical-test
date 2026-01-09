@@ -215,6 +215,52 @@
     margin-top: 2px;
     }
 
+    #{{ section.id }} .cb-features{
+      display: grid;
+      align-items: center;
+      background: #fff;
+      border-radius: 999px;
+      padding: 14px 18px;
+      gap: 0;
+    }
+
+    #{{ section.id }} .cb-features--1{ grid-template-columns: 1fr; }
+    #{{ section.id }} .cb-features--2{ grid-template-columns: repeat(2, 1fr); }
+    #{{ section.id }} .cb-features--3{ grid-template-columns: repeat(3, 1fr); }
+
+    #{{ section.id }} .cb-feature{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      padding: 6px 14px;
+      position: relative;
+    }
+
+    #{{ section.id }} .cb-features--2 .cb-feature:not(:last-child),
+    #{{ section.id }} .cb-features--3 .cb-feature:not(:last-child){
+      border-right: 1px solid rgba(0,0,0,0.12);
+    }
+
+    #{{ section.id }} .cb-feature__icon{
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      display: block;
+    }
+
+    #{{ section.id }} .cb-feature__text{
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.2;
+      opacity: 0.9;
+    }
+
+    #{{ section.id }} .cb-features-wrap--mobile { display: none; }
+    #{{ section.id }} .cb-features-wrap--desktop { display: block; }
+
   @media (max-width: 768px) {
     #{{ section.id }} .cb-card {
       padding: 18px;
@@ -255,6 +301,19 @@
 
     #{{ section.id }} .cb-rec-copy{ 
     line-height:110%;
+    }
+
+    #{{ section.id }} .cb-features{
+    border-radius: 18px;
+    padding: 12px 14px;
+  }
+
+  #{{ section.id }} .cb-features-wrap--mobile { display: block; margin-top: 12px; }
+  #{{ section.id }} .cb-features-wrap--desktop { display: none; }
+
+  @media (max-width: 340px) {
+    #{{ section.id }} .cb-radio {
+    padding:3px 3px;
     }
   }
 </style>
@@ -321,6 +380,38 @@
             </button>
             </form>
         </div>
+        {%- assign feature_blocks = section.blocks | where: "type", "feature_item" -%}
+        {%- assign features_valid_count = 0 -%}
+        {%- for b in feature_blocks -%}
+          {%- if b.settings.icon != blank and b.settings.text != blank -%}
+            {%- assign features_valid_count = features_valid_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- comment -%}
+        Features are rendered twice (desktop / mobile)
+        to allow cross-column positioning without JS.
+        {%- endcomment -%}
+        {%- if features_valid_count > 0 -%}
+          <div class="cb-features-wrap cb-features-wrap--mobile">
+            <div class="cb-features cb-features--{{ features_valid_count }}" role="list" aria-label="Highlights">
+              {%- for block in feature_blocks -%}
+                {%- if block.settings.icon != blank and block.settings.text != blank -%}
+                  <div class="cb-feature" role="listitem" {{ block.shopify_attributes }}>
+                    <img
+                      class="cb-feature__icon"
+                      src="{{ block.settings.icon | image_url: width: 64 }}"
+                      alt="{{ block.settings.icon_alt | escape }}"
+                      loading="lazy"
+                      width="22"
+                      height="22"
+                    >
+                    <p class="cb-feature__text">{{ block.settings.text }}</p>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
         </div>
         <div class="cb-col cb-right">
         <fieldset class="cb-fieldset">
@@ -337,7 +428,7 @@
             </label>
         </div>
         </fieldset>
-
+        <hr class="cb-divider">
         <fieldset class="cb-fieldset">
             <legend class="cb-legend">{{ section.settings.step2_label }}</legend>
             <div class="cb-row">
@@ -355,7 +446,7 @@
             </label>
             </div>
         </fieldset>
-
+        <hr class="cb-divider">
         <fieldset class="cb-fieldset">
             <legend class="cb-legend">{{ section.settings.step3_label }}</legend>
             <div class="cb-row">
@@ -373,6 +464,44 @@
             </label>
             </div>
         </fieldset>
+        <hr class="cb-divider">
+
+        {%- assign feature_blocks = section.blocks | where: "type", "feature_item" -%}
+        {%- assign features_valid_count = 0 -%}
+        {%- for b in feature_blocks -%}
+          {%- if b.settings.icon != blank and b.settings.text != blank -%}
+            {%- assign features_valid_count = features_valid_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- comment -%}
+        Features are rendered twice (desktop / mobile)
+        to allow cross-column positioning without JS.
+        {%- endcomment -%}
+        {%- if features_valid_count > 0 -%}
+          <div class="cb-features-wrap cb-features-wrap--desktop">
+          <div
+            class="cb-features cb-features--{{ features_valid_count }}"
+            role="list"
+            aria-label="Highlights"
+          >
+            {%- for block in feature_blocks -%}
+              {%- if block.settings.icon != blank and block.settings.text != blank -%}
+                <div class="cb-feature" role="listitem" {{ block.shopify_attributes }}>
+                  <img
+                    class="cb-feature__icon"
+                    src="{{ block.settings.icon | image_url: width: 64 }}"
+                    alt="{{ block.settings.icon_alt | escape }}"
+                    loading="lazy"
+                    width="22"
+                    height="22"
+                  >
+                  <p class="cb-feature__text">{{ block.settings.text }}</p>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+         </div>
+        {%- endif -%}
         </div>
         {%- comment -%} Coverage Builder rules (data only, hidden) {%- endcomment -%}
         <div class="cb-rules" hidden>
@@ -772,6 +901,16 @@ if (benefitsEl) {
     "label": "Benefit 5 (optional)"
     }
         ]
+    },
+  {
+      "type": "feature_item",
+      "name": "Feature item",
+      "limit": 3,
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "icon_alt", "label": "Icon alt", "default": "Icon" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Refund Policy" }
+      ]
     }
     ],
     "max_blocks": 50

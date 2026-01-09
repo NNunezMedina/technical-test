@@ -79,6 +79,46 @@
     "coverage_builder_igN8a4": {
       "type": "coverage-builder",
       "blocks": {
+        "feature_item_AkG8tJ": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qd.png",
+            "icon_alt": "Icon",
+            "text": "Refund Policy"
+          }
+        },
+        "feature_item_NmniWa": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qdczi5qdczi5q.png",
+            "icon_alt": "Icon",
+            "text": "24/7 Global Support"
+          }
+        },
+        "feature_item_t6bnLw": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zgxgrxzgxgrxzgxg.png",
+            "icon_alt": "Icon",
+            "text": "Trusted by Thousands"
+          }
+        },
+        "mini_benefit_fXrrnr": {
+          "type": "mini_benefit",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_1gtads1gtads1gta.png",
+            "text": "60-day money-back guarantee",
+            "icon_alt": "Icon"
+          }
+        },
+        "mini_benefit_n6KHDG": {
+          "type": "mini_benefit",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_1gtads1gtads1gta.png",
+            "text": "Instant Policy Confirmation",
+            "icon_alt": "Icon"
+          }
+        },
         "rule_nWGmFL": {
           "type": "rule",
           "settings": {
@@ -234,6 +274,11 @@
         }
       },
       "block_order": [
+        "feature_item_AkG8tJ",
+        "feature_item_NmniWa",
+        "feature_item_t6bnLw",
+        "mini_benefit_fXrrnr",
+        "mini_benefit_n6KHDG",
         "rule_nWGmFL",
         "rule_f4E8Wt",
         "rule_7iaVUQ",
