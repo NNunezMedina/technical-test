@@ -79,6 +79,14 @@
     "coverage_builder_igN8a4": {
       "type": "coverage-builder",
       "blocks": {
+        "feature_item_DFfJxW": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qdczi5qdczi5q.png",
+            "icon_alt": "Icon",
+            "text": "24/7 Global Support"
+          }
+        },
         "feature_item_nr9B6z": {
           "type": "feature_item",
           "settings": {
@@ -242,6 +250,7 @@
         }
       },
       "block_order": [
+        "feature_item_DFfJxW",
         "feature_item_nr9B6z",
         "rule_nWGmFL",
         "rule_f4E8Wt",
