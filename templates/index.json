@@ -79,6 +79,14 @@
     "coverage_builder_igN8a4": {
       "type": "coverage-builder",
       "blocks": {
+        "feature_item_rrHQGW": {
+          "type": "feature_item",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qd.png",
+            "icon_alt": "Icon",
+            "text": "Refund Policy"
+          }
+        },
         "feature_item_DFfJxW": {
           "type": "feature_item",
           "settings": {
@@ -250,6 +258,7 @@
         }
       },
       "block_order": [
+        "feature_item_rrHQGW",
         "feature_item_DFfJxW",
         "feature_item_nr9B6z",
         "rule_nWGmFL",
