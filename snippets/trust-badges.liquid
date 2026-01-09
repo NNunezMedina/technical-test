@@ -1,0 +1,41 @@
+{%- comment -%}
+  Trust Badges (Reusable Snippet)
+  - Renders ONLY if there is at least 1 valid item (icon + text)
+  - Up to 3 items
+{%- endcomment -%}
+
+{%- liquid
+  assign source_blocks = items
+  assign t_type = block_type | default: 'trust_badge'
+  assign valid_count = 0
+-%}
+
+{%- for b in source_blocks -%}
+  {%- if b.type == t_type and b.settings.icon != blank and b.settings.text != blank -%}
+    {%- assign valid_count = valid_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if valid_count > 0 -%}
+  <div class="tb tb--{{ valid_count }}" aria-label="Trust badges">
+    {%- assign rendered = 0 -%}
+    {%- for b in source_blocks -%}
+      {%- if b.type == t_type and b.settings.icon != blank and b.settings.text != blank -%}
+        {%- assign rendered = rendered | plus: 1 -%}
+        <div class="tb__item">
+          <img
+            class="tb__icon"
+            src="{{ b.settings.icon | image_url: width: 64 }}"
+            alt="{{ b.settings.icon_alt | escape }}"
+            loading="lazy"
+            width="20"
+            height="20"
+          >
+          <span class="tb__text">{{ b.settings.text }}</span>
+        </div>
+
+        {%- if rendered == 3 -%}{% break %}{%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

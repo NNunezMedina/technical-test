@@ -12,6 +12,30 @@
     "main": {
       "type": "c-main-product",
       "blocks": {
+        "trust_badge_zVb9Yk": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qd.png",
+            "text": "Secure Refund Policy",
+            "icon_alt": "Icon"
+          }
+        },
+        "trust_badge_8b6nyp": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qdczi5qdczi5q.png",
+            "text": "24/7 Global Support",
+            "icon_alt": "Icon"
+          }
+        },
+        "trust_badge_JheTf7": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zgxgrxzgxgrxzgxg.png",
+            "text": "Trusted by Thousands",
+            "icon_alt": "Icon"
+          }
+        },
         "vendor": {
           "type": "text",
           "settings": {
@@ -57,6 +81,9 @@
         }
       },
       "block_order": [
+        "trust_badge_zVb9Yk",
+        "trust_badge_8b6nyp",
+        "trust_badge_JheTf7",
         "vendor",
         "title",
         "price",
