@@ -107,14 +107,6 @@
     font-weight: 600;
     }
 
-    #{{ section.id }} .cb-rec-image {
-    width: 100%;
-    height:auto;
-    margin-bottom: 12px;
-    border-radius: 12px;
-    display: block;
-    }
-
     #{{ section.id }} .cb-radio[aria-disabled="true"] {
     opacity: 0.45;
     cursor: not-allowed;
@@ -140,6 +132,26 @@
     #{{ section.id }} .cb-atc-btn:disabled{
     opacity:.5;
     cursor:not-allowed;
+    }
+
+    #{{ section.id }} .cb-benefits {
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+    }
+
+    #{{ section.id }} .cb-benefits li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    }
+
+    #{{ section.id }} .cb-benefits img {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
     }
 
   @media (max-width: 768px) {
@@ -198,6 +210,7 @@
       <div class="cb-grid">
         <div class="cb-col cb-left">
             {% assign first_rule = section.blocks | where: "type", "rule" | first %}
+             {% assign rec_short_copy = first_rule.settings.short_copy %}
             {% assign rec_product = first_rule.settings.product %}
             {% assign rec_variant = nil %}
 
@@ -219,22 +232,17 @@
         <div class="cb-rec" data-rec>
             {% if rec_product and rec_variant %}
             <p class="cb-kicker">Recommended</p>
-            {% if rec_product.featured_image %}
-                <img
-                class="cb-rec-image" data-rec-image
-                src="{{ rec_product.featured_image | image_url: width: 600 }}"
-                alt="{{ rec_product.featured_image.alt | escape }}"
-                width="{{ rec_product.featured_image.width }}"
-                height="{{ rec_product.featured_image.height }}"
-                loading="lazy"
-                >
-            {% endif %}
             <h3 class="cb-rec-title" data-rec-title>{{ rec_product.title }}</h3>
             <p class="cb-rec-price" data-rec-price>{{ rec_variant.price | money }}</p>
-            {% if rec_product.description != blank %}
             <div class="cb-rec-copy" data-rec-desc>
-            {{ rec_product.description | strip_html | truncate: 180 }}
+            {% if rec_short_copy != blank %}
+                {{ rec_short_copy }}
+            {% endif %}
             </div>
+            <ul class="cb-benefits" data-rec-benefits></ul>
+            {% else %}
+            {{ section.settings.left_col_text }}
+            {% endif %}
             <form method="post" action="/cart/add" class="cb-atc" data-atc-form>
             <input type="hidden" name="id" value="{{ rec_variant.id }}" data-atc-variant>
             <input type="hidden" name="quantity" value="1">
@@ -243,10 +251,6 @@
                 Add to cart
             </button>
             </form>
-            {% endif %}
-            {% else %}
-            {{ section.settings.left_col_text }}
-            {% endif %}
         </div>
         </div>
         <div class="cb-col cb-right">
@@ -333,7 +337,12 @@
                 data-image="{% if p.featured_image %}{{ p.featured_image | image_url: width: 600 }}{% endif %}"
                 data-price="{{ vv.price | money | escape }}"
                 data-variant-id="{{ vv.id }}"
-                data-description="{{ p.description | strip_html | truncate: 180 | escape }}"
+                data-short-copy="{{ b.settings.short_copy | strip_html | escape }}"
+                data-benefit1="{{ b.settings.benefit_1 | escape }}"
+                data-benefit2="{{ b.settings.benefit_2 | escape }}"
+                data-benefit3="{{ b.settings.benefit_3 | escape }}"
+                data-benefit4="{{ b.settings.benefit_4 | escape }}"
+                data-benefit5="{{ b.settings.benefit_5 | escape }}"
             ></div>
             {% endif %}
         {% endfor %}
@@ -356,9 +365,9 @@
   title: root.querySelector('[data-rec-title]'),
   price: root.querySelector('[data-rec-price]'),
   desc:  root.querySelector('[data-rec-desc]'),
-  img:   root.querySelector('[data-rec-image]'),
   variantInput: root.querySelector('[data-atc-variant]'),
   atcBtn: root.querySelector('[data-atc-btn]'),
+  atcForm: root.querySelector('[data-atc-form]'),
 };
 
   const getValue = (name) => root.querySelector(`input[name="${name}"]:checked`)?.value;
@@ -430,7 +439,9 @@ const applyDefaultRuleIfAny = () => {
 
     if (els.title) els.title.textContent = rule.dataset.title || '';
     if (els.price) els.price.textContent = rule.dataset.price || '';
-    if (els.desc)  els.desc.textContent  = rule.dataset.description || '';
+    if (els.desc) {
+    els.desc.textContent = rule.dataset.shortCopy || rule.dataset.description || '';
+    }
     if (els.variantInput) {
     els.variantInput.value = rule.dataset.variantId || '';
     }
@@ -438,15 +449,33 @@ const applyDefaultRuleIfAny = () => {
     els.atcBtn.disabled = !rule.dataset.variantId;
     }
 
-    if (els.img) {
-      const src = rule.dataset.image;
-      if (src) {
-        els.img.src = src;
-        els.img.hidden = false;
-      } else {
-        els.img.hidden = true;
-      }
+    const benefitsEl = root.querySelector('[data-rec-benefits]');
+if (benefitsEl) {
+  benefitsEl.innerHTML = '';
+
+  const iconUrl = '{{ section.settings.benefit_icon | image_url: width: 32 }}';
+
+  for (let i = 1; i <= 5; i++) {
+    const text = rule.dataset[`benefit${i}`];
+    if (!text) continue;
+
+    const li = document.createElement('li');
+
+    if (iconUrl) {
+      const img = document.createElement('img');
+      img.src = iconUrl;
+      img.alt = 'Benefit';
+      img.loading = 'lazy';
+      li.appendChild(img);
     }
+
+    const span = document.createElement('span');
+    span.textContent = text;
+    li.appendChild(span);
+
+    benefitsEl.appendChild(li);
+  }
+}
 
     // si luego agregas CTA, aquí guardas URL
     root.querySelector('[data-rec]')?.setAttribute('data-url', rule.dataset.url || '');
@@ -535,6 +564,11 @@ const applyDefaultRuleIfAny = () => {
     { "type": "text", "id": "coverage_standard_label", "label": "Standard label", "default": "Standard" },
     { "type": "text", "id": "coverage_premium_label", "label": "Premium label", "default": "Premium" },
     { "type": "text", "id": "coverage_max_label", "label": "Max label", "default": "Max" },
+    {
+    "type": "image_picker",
+    "id": "benefit_icon",
+    "label": "Benefit check icon"
+    },
     {
       "type": "header",
       "content": "Styles"
@@ -633,7 +667,38 @@ const applyDefaultRuleIfAny = () => {
         ]
       },
       { "type": "product", "id": "product", "label": "Recommended product" },
-      { "type": "text", "id": "variant_title", "label": "Variant title (optional)" }
+      { "type": "text", "id": "variant_title", "label": "Variant title (optional)" },
+        {
+    "type": "textarea",
+    "id": "short_copy",
+    "label": "Short copy (override product description)",
+    "default": "Short copy"
+    },
+    {
+    "type": "text",
+    "id": "benefit_1",
+    "label": "Benefit 1"
+    },
+    {
+    "type": "text",
+    "id": "benefit_2",
+    "label": "Benefit 2"
+    },
+    {
+    "type": "text",
+    "id": "benefit_3",
+    "label": "Benefit 3"
+    },
+    {
+    "type": "text",
+    "id": "benefit_4",
+    "label": "Benefit 4 (optional)"
+    },
+    {
+    "type": "text",
+    "id": "benefit_5",
+    "label": "Benefit 5 (optional)"
+    }
         ]
     }
     ],

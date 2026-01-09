@@ -87,7 +87,13 @@
             "trip_cost": "gt1500",
             "coverage": "premium",
             "product": "trip-cancellation-insurance",
-            "variant_title": "premium"
+            "variant_title": "premium",
+            "short_copy": "Enhanced cancellation coverage with higher protection limits",
+            "benefit_1": "Solid coverage for planned trips",
+            "benefit_2": "Cancellation refunds with valid reasons",
+            "benefit_3": "Cancellation refunds with valid reasons",
+            "benefit_4": "",
+            "benefit_5": ""
           }
         },
         "rule_f4E8Wt": {
@@ -98,7 +104,13 @@
             "trip_cost": "gt1500",
             "coverage": "standard",
             "product": "trip-cancellation-insurance",
-            "variant_title": "standard"
+            "variant_title": "standard",
+            "short_copy": "Essential protection for unexpected trip cancellations",
+            "benefit_1": "Essential protection for short trips",
+            "benefit_2": "Essential protection for short trips",
+            "benefit_3": "24/7 assistance in your language",
+            "benefit_4": "Clear coverage without hidden conditions",
+            "benefit_5": ""
           }
         },
         "rule_7iaVUQ": {
@@ -109,7 +121,13 @@
             "trip_cost": "500_1500",
             "coverage": "premium",
             "product": "trip-cancellation-insurance",
-            "variant_title": "premium"
+            "variant_title": "premium",
+            "short_copy": "Enhanced cancellation coverage with higher protection limits",
+            "benefit_1": "Comprehensive protection for premium trips",
+            "benefit_2": "High coverage for prepaid travel costs",
+            "benefit_3": "Priority assistance during travel disruptions",
+            "benefit_4": "Ideal for complex expensive itineraries",
+            "benefit_5": "Reduce losses from unexpected changes"
           }
         },
         "rule_TVb47Y": {
@@ -120,7 +138,13 @@
             "trip_cost": "500_1500",
             "coverage": "standard",
             "product": "trip-cancellation-insurance",
-            "variant_title": "standard"
+            "variant_title": "standard",
+            "short_copy": "Essential protection for unexpected trip cancellations",
+            "benefit_1": "Flexible coverage for frequent short trips",
+            "benefit_2": "Saves money versus separate policies",
+            "benefit_3": "",
+            "benefit_4": "",
+            "benefit_5": ""
           }
         },
         "rule_Uqabde": {
@@ -131,7 +155,13 @@
             "trip_cost": "lt500",
             "coverage": "premium",
             "product": "flight-delay-coverage",
-            "variant_title": "premium"
+            "variant_title": "premium",
+            "short_copy": "Higher payouts for delayed flights worldwide",
+            "benefit_1": "Perfect for frequent weekend travelers",
+            "benefit_2": "Ideal balance for recurring travel plans",
+            "benefit_3": "Ideal balance for recurring travel plans",
+            "benefit_4": "",
+            "benefit_5": ""
           }
         },
         "rule_bMwRBt": {
@@ -142,7 +172,13 @@
             "trip_cost": "lt500",
             "coverage": "standard",
             "product": "flight-delay-coverage",
-            "variant_title": "standard"
+            "variant_title": "standard",
+            "short_copy": "Compensation for flight delays beyond minimum threshold",
+            "benefit_1": "Simple activation without repeated forms",
+            "benefit_2": "Protects medium value travel bookings",
+            "benefit_3": "",
+            "benefit_4": "",
+            "benefit_5": ""
           }
         },
         "rule_ya9c8C": {
@@ -153,7 +189,13 @@
             "trip_cost": "any",
             "coverage": "max",
             "product": "annual-multi-trip-insurance",
-            "variant_title": "max"
+            "variant_title": "max",
+            "short_copy": "Maximum annual coverage with premium assistance",
+            "benefit_1": "Annual protection for frequent premium travelers",
+            "benefit_2": "Strong coverage for expensive travel bookings",
+            "benefit_3": "Minimizes impact of major cancellations",
+            "benefit_4": "",
+            "benefit_5": ""
           }
         },
         "rule_UUpyPY": {
@@ -164,7 +206,13 @@
             "trip_cost": "any",
             "coverage": "standard",
             "product": "annual-multi-trip-insurance",
-            "variant_title": "standard"
+            "variant_title": "standard",
+            "short_copy": "Year-round protection for multiple trips",
+            "benefit_1": "Maximum protection with added benefits",
+            "benefit_2": "Priority assistance on every journey",
+            "benefit_3": "Extra peace of mind when traveling",
+            "benefit_4": "Includes extras for greater security",
+            "benefit_5": ""
           }
         },
         "rule_8E9KGd": {
@@ -175,7 +223,13 @@
             "trip_cost": "any",
             "coverage": "premium",
             "product": "annual-multi-trip-insurance",
-            "variant_title": "premium"
+            "variant_title": "premium",
+            "short_copy": "Extended annual coverage with higher limits",
+            "benefit_1": "Top tier protection for frequent travelers",
+            "benefit_2": "Extended coverage for higher travel expenses",
+            "benefit_3": "Faster response with priority support",
+            "benefit_4": "Ideal for business and frequent travel",
+            "benefit_5": "Premium protection all year long"
           }
         }
       },
@@ -205,6 +259,7 @@
         "coverage_standard_label": "Standard",
         "coverage_premium_label": "Premium",
         "coverage_max_label": "Max",
+        "benefit_icon": "shopify://shop_images/Vector_22.png",
         "background_color": "#f7f4ef",
         "card_bg_color": "#ffffff",
         "text_color": "#121212",
