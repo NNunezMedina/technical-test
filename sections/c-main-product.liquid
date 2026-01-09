@@ -1,5 +1,6 @@
-{%- comment -%} Trust Badges snippet styles {%- endcomment -%}
+{%- comment -%} Trust Badges and accordions snippet styles {%- endcomment -%}
 {{ 'trust-badges.css' | asset_url | stylesheet_tag }}
+{{ 'product-accordions.css' | asset_url | stylesheet_tag }}
 <product-info
   id="MainProduct-{{ section.id }}"
   class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
@@ -492,7 +493,11 @@
                 items: section.blocks,
                 block_type: 'trust_badge'
                 %}
-                <p>HOLA</p>
+                {% render 'product-accordions',
+                items: section.blocks,
+                block_type: 'accordion',
+                id: section.id
+                %}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -731,6 +736,8 @@
       </script>
       <script src="{{ 'product-model.js' | asset_url }}" defer></script>
     {%- endif -%}
+    {%- comment -%} calling product accordion javascript {%- endcomment -%}
+    <script src="{{ 'product-accordion.js' | asset_url }}" defer></script>
 
     {%- liquid
       if product.selected_or_first_available_variant.featured_media
@@ -760,6 +767,15 @@
         { "type": "image_picker", "id": "icon", "label": "Icon" },
         { "type": "text", "id": "text", "label": "Text", "default": "60-day money-back guarantee" },
         { "type": "text", "id": "icon_alt", "label": "Icon alt", "default": "Icon" }
+    ]
+    },
+    {
+    "type": "accordion",
+    "name": "Accordion",
+    "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Refund policy" },
+        { "type": "richtext", "id": "content", "label": "Content" },
+        { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false }
     ]
     },
     {

@@ -1,0 +1,30 @@
+{%- comment -%} it has a product-accordion.js in assets to handle closing of the accordion {%- endcomment -%}
+{%- liquid
+  assign t_type = block_type | default: 'accordion'
+  assign valid_count = 0
+-%}
+
+{%- for b in items -%}
+  {%- if b.type == t_type and b.settings.title != blank and b.settings.content != blank -%}
+    {%- assign valid_count = valid_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if valid_count > 0 -%}
+  <div class="pa" aria-label="Product information accordions">
+    {%- for b in items -%}
+      {%- if b.type == t_type and b.settings.title != blank and b.settings.content != blank -%}
+        <details class="pa__item" {% if b.settings.open_by_default %}open{% endif %}>
+          <summary class="pa__summary">
+            <span class="pa__title">{{ b.settings.title }}</span>
+            <span class="pa__chev" aria-hidden="true"></span>
+          </summary>
+
+          <div class="pa__content rte">
+            {{ b.settings.content }}
+          </div>
+        </details>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

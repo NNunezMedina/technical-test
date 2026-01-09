@@ -12,6 +12,30 @@
     "main": {
       "type": "c-main-product",
       "blocks": {
+        "accordion_pKU3ay": {
+          "type": "accordion",
+          "settings": {
+            "title": "Terms & Policy",
+            "content": "<p>By purchasing this digital product, you agree to our terms and conditions. All sales are final unless otherwise stated. This product is delivered digitally and does not require shipping. Unauthorized sharing, redistribution, or resale of this content is strictly prohibited. Please review all product details carefully before completing your purchase.</p>",
+            "open_by_default": false
+          }
+        },
+        "accordion_JdJLP7": {
+          "type": "accordion",
+          "settings": {
+            "title": "What’s Included",
+            "content": "<p>This digital product includes immediate access to all listed materials after purchase. You will receive downloadable files and/or secure access instructions directly on the confirmation page and via email. Updates to the product, if applicable, will be provided at no additional cost unless specified.</p>",
+            "open_by_default": false
+          }
+        },
+        "accordion_EgytMe": {
+          "type": "accordion",
+          "settings": {
+            "title": "Support & Access",
+            "content": "<p>If you experience any issues accessing your digital product, our support team is available to help. Assistance is provided via email, and most inquiries are resolved within 24 hours. Please ensure you use the same email address from your purchase when contacting support for faster assistance.</p>",
+            "open_by_default": false
+          }
+        },
         "trust_badge_zVb9Yk": {
           "type": "trust_badge",
           "settings": {
@@ -81,6 +105,9 @@
         }
       },
       "block_order": [
+        "accordion_pKU3ay",
+        "accordion_JdJLP7",
+        "accordion_EgytMe",
         "trust_badge_zVb9Yk",
         "trust_badge_8b6nyp",
         "trust_badge_JheTf7",
