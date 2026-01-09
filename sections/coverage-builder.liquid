@@ -24,17 +24,17 @@
 
   #{{ section.id }} .cb-title {
     margin: 0;
-    font-size: 28px;
+    font-size: 30px;
     line-height: 1.2;
     color: {{ section.settings.text_color }};
+    font-weight:600;
   }
 
   #{{ section.id }} .cb-subtitle {
     margin: 10px 0 0;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.5;
     color: {{ section.settings.text_color }};
-    opacity: 0.85;
   }
 
   #{{ section.id }} .cb-grid {
@@ -50,6 +50,67 @@
     padding: 16px;
     min-height: 160px;
   }
+
+  #{{ section.id }} .cb-left {
+  background: white;
+  }
+
+  #{{ section.id }} .cb-rec{ 
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding:24px 24px;
+  position:relative;
+  border-radius:20px;
+  }
+
+  #{{ section.id }} .cb-kicker {
+  display:flex;
+  justify-content:center;
+  position:absolute;
+  top:-25px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#efedee;
+  padding:0 12px;
+  border-radius:20px;
+  font-size:14px;
+  color:#2B3C5E;
+  font-weight:700;
+  }
+
+  #{{ section.id }} .cb-rec-title { 
+    margin: 0.4rem 0;
+    display:flex;
+    justify-content:center;
+    color:#2B3C5E;
+    font-size:24px;
+    font-weight:600; 
+    }
+
+    #{{ section.id }} .cb-rec-price { 
+    margin: 0.4rem 0;
+    display:flex;
+    justify-content:center;
+    font-size:24px;
+    font-weight:600; 
+    }
+
+    #{{ section.id }} .cb-divider {
+      border: 0;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.12);
+      margin: 12px 0;
+    }
+
+    #{{ section.id }} .cb-rec-copy{ 
+    margin: 0.4rem 0;
+    display:flex;
+    justify-content:center;
+    color:#2B3C5E;
+    font-size:16px;
+    font-weight:400; 
+    text-align:center;
+    }
 
   #{{ section.id }} .cb-fieldset {
   border: 0;
@@ -181,13 +242,19 @@
     }
 
     #{{ section.id }} .cb-kicker 
-    { margin: 0 0 8px; font-size: 12px; opacity: .7; 
+    { font-size: 12px; 
+      width:140px;
     }
     #{{ section.id }} .cb-rec-title 
     { margin: 0 0 8px; font-size: 18px; 
+      text-align:center;
     }
     #{{ section.id }} .cb-rec-price 
     { margin: 0; font-weight: 600; 
+    }
+
+    #{{ section.id }} .cb-rec-copy{ 
+    line-height:110%;
     }
   }
 </style>
@@ -231,14 +298,16 @@
             {% endif %}
         <div class="cb-rec" data-rec>
             {% if rec_product and rec_variant %}
-            <p class="cb-kicker">Recommended</p>
+            <p class="cb-kicker">Recommended Plan</p>
             <h3 class="cb-rec-title" data-rec-title>{{ rec_product.title }}</h3>
             <p class="cb-rec-price" data-rec-price>{{ rec_variant.price | money }}</p>
+            <hr class="cb-divider">
             <div class="cb-rec-copy" data-rec-desc>
             {% if rec_short_copy != blank %}
                 {{ rec_short_copy }}
             {% endif %}
             </div>
+            <hr class="cb-divider">
             <ul class="cb-benefits" data-rec-benefits></ul>
             {% else %}
             {{ section.settings.left_col_text }}
@@ -274,15 +343,15 @@
             <div class="cb-row">
             <label class="cb-radio">
                 <input type="radio" name="trip_cost_{{ section.id }}" value="lt500" checked>
-                <span>&lt;€500</span>
+                <span>{{ section.settings.trip_cost_lt500_label }}</span>
             </label>
             <label class="cb-radio">
                 <input type="radio" name="trip_cost_{{ section.id }}" value="500_1500">
-                <span>€500–€1500</span>
+                <span>{{ section.settings.trip_cost_500_1500_label }}</span>
             </label>
             <label class="cb-radio">
                 <input type="radio" name="trip_cost_{{ section.id }}" value="gt1500">
-                <span>&gt;€1500</span>
+                <span>{{ section.settings.trip_cost_gt1500_label }}</span>
             </label>
             </div>
         </fieldset>
@@ -559,6 +628,9 @@ if (benefitsEl) {
     { "type": "text", "id": "trip_type_multi_label", "label": "Multi-trip label", "default": "Multi-trip" },
 
     { "type": "text", "id": "step2_label", "label": "Step 2 label", "default": "Trip Cost Range" },
+    { "type": "text", "id": "trip_cost_lt500_label", "label": "Trip cost <500 label", "default": "< €500" },
+    { "type": "text", "id": "trip_cost_500_1500_label", "label": "Trip cost 500–1500 label", "default": "€500–€1500" },
+    { "type": "text", "id": "trip_cost_gt1500_label", "label": "Trip cost >1500 label", "default": "> €1500" },
 
     { "type": "text", "id": "step3_label", "label": "Step 3 label", "default": "Coverage Level" },
     { "type": "text", "id": "coverage_standard_label", "label": "Standard label", "default": "Standard" },
