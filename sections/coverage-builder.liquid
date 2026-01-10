@@ -1,3 +1,5 @@
+{%- comment -%} Trust Badges styles {%- endcomment -%}
+{{ 'trust-badges.css' | asset_url | stylesheet_tag }}
 <style>
   #{{ section.id }} {
     padding-top: {{ section.settings.padding_top }}px;
@@ -215,51 +217,8 @@
     margin-top: 2px;
     }
 
-    #{{ section.id }} .cb-features{
-      display: grid;
-      align-items: center;
-      background: #fff;
-      border-radius: 999px;
-      padding: 14px 18px;
-      gap: 0;
-    }
-
-    #{{ section.id }} .cb-features--1{ grid-template-columns: 1fr; }
-    #{{ section.id }} .cb-features--2{ grid-template-columns: repeat(2, 1fr); }
-    #{{ section.id }} .cb-features--3{ grid-template-columns: repeat(3, 1fr); }
-
-    #{{ section.id }} .cb-feature{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-align: center;
-      padding: 6px 14px;
-      position: relative;
-    }
-
-    #{{ section.id }} .cb-features--2 .cb-feature:not(:last-child),
-    #{{ section.id }} .cb-features--3 .cb-feature:not(:last-child){
-      border-right: 1px solid rgba(0,0,0,0.12);
-    }
-
-    #{{ section.id }} .cb-feature__icon{
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      display: block;
-    }
-
-    #{{ section.id }} .cb-feature__text{
-      margin: 0;
-      font-size: 12px;
-      line-height: 1.2;
-      opacity: 0.9;
-    }
-
-    #{{ section.id }} .cb-features-wrap--mobile { display: none; }
-    #{{ section.id }} .cb-features-wrap--desktop { display: block; }
+    #{{ section.id }} .cb-tb--mobile { display: none; }
+    #{{ section.id }} .cb-tb--desktop { display: block; }
 
   @media (max-width: 768px) {
     #{{ section.id }} .cb-card {
@@ -308,10 +267,16 @@
     padding: 12px 14px;
   }
 
-  #{{ section.id }} .cb-features-wrap--mobile { display: block; margin-top: 12px; }
-  #{{ section.id }} .cb-features-wrap--desktop { display: none; }
+  #{{ section.id }} .cb-tb--mobile { display: block; margin-top: 12px; }
+  #{{ section.id }} .cb-tb--desktop { display: none; }
 
-  @media (max-width: 340px) {
+  .tb{
+  display: flex;
+  justify-content:center;
+}
+}
+
+    @media (max-width: 340px) {
     #{{ section.id }} .cb-radio {
     padding:3px 3px;
     }
@@ -335,25 +300,38 @@
 
       <div class="cb-grid">
         <div class="cb-col cb-left">
-            {% assign first_rule = section.blocks | where: "type", "rule" | first %}
-             {% assign rec_short_copy = first_rule.settings.short_copy %}
-            {% assign rec_product = first_rule.settings.product %}
-            {% assign rec_variant = nil %}
+            {%- assign rules = section.blocks | where: "type", "rule" -%}
+            {%- assign initial_rule = nil -%}
+
+            {%- for b in rules -%}
+              {%- if b.settings.is_default -%}
+                {%- assign initial_rule = b -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if initial_rule == nil -%}
+              {%- assign initial_rule = rules | first -%}
+            {%- endif -%}
+
+            {%- assign rec_short_copy = initial_rule.settings.short_copy -%}
+            {%- assign rec_product = initial_rule.settings.product -%}
+            {%- assign rec_variant = nil -%}
 
             {% if rec_product %}
-            {% if first_rule.settings.variant_title != blank %}
-                {% assign target_variant_title = first_rule.settings.variant_title | downcase | strip %}
-            {% for v in rec_product.variants %}
-            {% assign v_title = v.title | downcase | strip %}
-            {% if v_title == target_variant_title %}
-                {% assign rec_variant = v %}
-                {% break %}
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-            {% unless rec_variant %}
+              {% if initial_rule.settings.variant_title != blank %}
+                {% assign target_variant_title = initial_rule.settings.variant_title | downcase | strip %}
+                {% for v in rec_product.variants %}
+                  {% assign v_title = v.title | downcase | strip %}
+                  {% if v_title == target_variant_title %}
+                    {% assign rec_variant = v %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              {% unless rec_variant %}
                 {% assign rec_variant = rec_product.selected_or_first_available_variant %}
-            {% endunless %}
+              {% endunless %}
             {% endif %}
         <div class="cb-rec" data-rec>
             {% if rec_product and rec_variant %}
@@ -371,59 +349,35 @@
             {% else %}
             {{ section.settings.left_col_text }}
             {% endif %}
+            {% if rec_product and rec_variant %}
             <form method="post" action="/cart/add" class="cb-atc" data-atc-form>
-            <input type="hidden" name="id" value="{{ rec_variant.id }}" data-atc-variant>
-            <input type="hidden" name="quantity" value="1">
-
-            <button type="submit" class="cb-atc-btn" data-atc-btn>
+              <input type="hidden" name="id" value="{{ rec_variant.id }}" data-atc-variant>
+              <button type="submit" class="cb-atc-btn" data-atc-btn>
                 Add to cart
-            </button>
+              </button>
             </form>
+          {% else %}
+            <button class="cb-atc-btn" disabled>
+              Add to cart
+            </button>
+          {% endif %}
+          <div class="cb-tb cb-tb--mobile">
+          {% render 'trust-badges', items: section.blocks, block_type: 'trust_badge' %}
         </div>
-        {%- assign feature_blocks = section.blocks | where: "type", "feature_item" -%}
-        {%- assign features_valid_count = 0 -%}
-        {%- for b in feature_blocks -%}
-          {%- if b.settings.icon != blank and b.settings.text != blank -%}
-            {%- assign features_valid_count = features_valid_count | plus: 1 -%}
-          {%- endif -%}
-        {%- endfor -%}
-        {%- comment -%}
-        Features are rendered twice (desktop / mobile)
-        to allow cross-column positioning without JS.
-        {%- endcomment -%}
-        {%- if features_valid_count > 0 -%}
-          <div class="cb-features-wrap cb-features-wrap--mobile">
-            <div class="cb-features cb-features--{{ features_valid_count }}" role="list" aria-label="Highlights">
-              {%- for block in feature_blocks -%}
-                {%- if block.settings.icon != blank and block.settings.text != blank -%}
-                  <div class="cb-feature" role="listitem" {{ block.shopify_attributes }}>
-                    <img
-                      class="cb-feature__icon"
-                      src="{{ block.settings.icon | image_url: width: 64 }}"
-                      alt="{{ block.settings.icon_alt | escape }}"
-                      loading="lazy"
-                      width="22"
-                      height="22"
-                    >
-                    <p class="cb-feature__text">{{ block.settings.text }}</p>
-                  </div>
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-          </div>
-        {%- endif -%}
+        </div>
         </div>
         <div class="cb-col cb-right">
         <fieldset class="cb-fieldset">
         <legend class="cb-legend">{{ section.settings.step1_label }}</legend>
         <div class="cb-row">
             <label class="cb-radio">
-            <input type="radio" name="trip_type_{{ section.id }}" value="single" checked>
+            {%- assign init_trip_type = initial_rule.settings.trip_type | default: 'single' -%}
+            <input type="radio" name="trip_type_{{ section.id }}" value="single" {% if init_trip_type == 'single' %}checked{% endif %}>
             <span>{{ section.settings.trip_type_single_label }}</span>
             </label>
 
             <label class="cb-radio">
-            <input type="radio" name="trip_type_{{ section.id }}" value="multi">
+            <input type="radio" name="trip_type_{{ section.id }}" value="multi" {% if init_trip_type == 'multi' %}checked{% endif %}>
             <span>{{ section.settings.trip_type_multi_label }}</span>
             </label>
         </div>
@@ -433,15 +387,17 @@
             <legend class="cb-legend">{{ section.settings.step2_label }}</legend>
             <div class="cb-row">
             <label class="cb-radio">
-                <input type="radio" name="trip_cost_{{ section.id }}" value="lt500" checked>
+              {%- assign init_trip_cost = initial_rule.settings.trip_cost | default: 'lt500' -%}
+              {%- if init_trip_cost == 'any' -%}{%- assign init_trip_cost = 'lt500' -%}{%- endif -%}
+                <input type="radio" name="trip_cost_{{ section.id }}" value="lt500" {% if init_trip_cost == 'lt500' %}checked{% endif %}>
                 <span>{{ section.settings.trip_cost_lt500_label }}</span>
             </label>
             <label class="cb-radio">
-                <input type="radio" name="trip_cost_{{ section.id }}" value="500_1500">
+                <input type="radio" name="trip_cost_{{ section.id }}" value="500_1500" {% if init_trip_cost == '500_1500' %}checked{% endif %}>
                 <span>{{ section.settings.trip_cost_500_1500_label }}</span>
             </label>
             <label class="cb-radio">
-                <input type="radio" name="trip_cost_{{ section.id }}" value="gt1500">
+                <input type="radio" name="trip_cost_{{ section.id }}" value="gt1500" {% if init_trip_cost == 'gt1500' %}checked{% endif %}>
                 <span>{{ section.settings.trip_cost_gt1500_label }}</span>
             </label>
             </div>
@@ -451,57 +407,29 @@
             <legend class="cb-legend">{{ section.settings.step3_label }}</legend>
             <div class="cb-row">
             <label class="cb-radio">
-                <input type="radio" name="coverage_{{ section.id }}" value="standard" checked>
+              {%- assign init_coverage = initial_rule.settings.coverage | default: 'standard' -%}
+                <input type="radio" name="coverage_{{ section.id }}" value="standard" {% if init_coverage == 'standard' %}checked{% endif %}>
                 <span>{{ section.settings.coverage_standard_label }}</span>
             </label>
             <label class="cb-radio">
-                <input type="radio" name="coverage_{{ section.id }}" value="premium">
+                <input type="radio" name="coverage_{{ section.id }}" value="premium" {% if init_coverage == 'premium' %}checked{% endif %}>
                 <span>{{ section.settings.coverage_premium_label }}</span>
             </label>
             <label class="cb-radio">
-            <input type="radio" name="coverage_{{ section.id }}" value="max" data-coverage-max>
+            <input type="radio" name="coverage_{{ section.id }}" value="max" {% if init_coverage == 'max' %}checked{% endif %}>
             <span>{{ section.settings.coverage_max_label }}</span>
             </label>
             </div>
         </fieldset>
         <hr class="cb-divider">
-
-        {%- assign feature_blocks = section.blocks | where: "type", "feature_item" -%}
-        {%- assign features_valid_count = 0 -%}
-        {%- for b in feature_blocks -%}
-          {%- if b.settings.icon != blank and b.settings.text != blank -%}
-            {%- assign features_valid_count = features_valid_count | plus: 1 -%}
-          {%- endif -%}
-        {%- endfor -%}
         {%- comment -%}
         Features are rendered twice (desktop / mobile)
         to allow cross-column positioning without JS.
         {%- endcomment -%}
-        {%- if features_valid_count > 0 -%}
-          <div class="cb-features-wrap cb-features-wrap--desktop">
-          <div
-            class="cb-features cb-features--{{ features_valid_count }}"
-            role="list"
-            aria-label="Highlights"
-          >
-            {%- for block in feature_blocks -%}
-              {%- if block.settings.icon != blank and block.settings.text != blank -%}
-                <div class="cb-feature" role="listitem" {{ block.shopify_attributes }}>
-                  <img
-                    class="cb-feature__icon"
-                    src="{{ block.settings.icon | image_url: width: 64 }}"
-                    alt="{{ block.settings.icon_alt | escape }}"
-                    loading="lazy"
-                    width="22"
-                    height="22"
-                  >
-                  <p class="cb-feature__text">{{ block.settings.text }}</p>
-                </div>
-              {%- endif -%}
-            {%- endfor -%}
+                 {%- comment -%} render Trust Badges snippet {%- endcomment -%}
+            <div class="cb-tb cb-tb--desktop">
+            {% render 'trust-badges', items: section.blocks, block_type: 'trust_badge' %}
           </div>
-         </div>
-        {%- endif -%}
         </div>
         {%- comment -%} Coverage Builder rules (data only, hidden) {%- endcomment -%}
         <div class="cb-rules" hidden>
@@ -644,7 +572,7 @@ const applyDefaultRuleIfAny = () => {
     els.variantInput.value = rule.dataset.variantId || '';
     }
     if (els.atcBtn) {
-    els.atcBtn.disabled = !rule.dataset.variantId;
+    els.atcBtn.disabled = !rule || !rule.dataset.variantId;
     }
 
     const benefitsEl = root.querySelector('[data-rec-benefits]');
@@ -708,7 +636,6 @@ if (benefitsEl) {
     if (e.target?.matches('input[type="radio"]')) update();
   });
 
-  applyDefaultRuleIfAny();
   update();
 })();
 </script>
@@ -902,14 +829,14 @@ if (benefitsEl) {
     }
         ]
     },
-  {
-      "type": "feature_item",
-      "name": "Feature item",
+     {
+      "type": "trust_badge",
+      "name": "Trust badge",
       "limit": 3,
       "settings": [
         { "type": "image_picker", "id": "icon", "label": "Icon" },
-        { "type": "text", "id": "icon_alt", "label": "Icon alt", "default": "Icon" },
-        { "type": "text", "id": "text", "label": "Text", "default": "Refund Policy" }
+        { "type": "text", "id": "text", "label": "Text", "default": "60-day money-back guarantee" },
+        { "type": "text", "id": "icon_alt", "label": "Icon alt", "default": "Icon" }
       ]
     }
     ],

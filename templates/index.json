@@ -79,28 +79,45 @@
     "coverage_builder_igN8a4": {
       "type": "coverage-builder",
       "blocks": {
-        "feature_item_rrHQGW": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qd.png",
-            "icon_alt": "Icon",
-            "text": "Refund Policy"
-          }
-        },
-        "feature_item_DFfJxW": {
-          "type": "feature_item",
-          "settings": {
-            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qdczi5qdczi5q.png",
-            "icon_alt": "Icon",
-            "text": "24/7 Global Support"
-          }
-        },
-        "feature_item_nr9B6z": {
-          "type": "feature_item",
+        "trust_badge_tfNe8e": {
+          "type": "trust_badge",
           "settings": {
             "icon": "shopify://shop_images/Gemini_Generated_Image_zgxgrxzgxgrxzgxg.png",
-            "icon_alt": "Icon",
-            "text": "Trusted by Thousands"
+            "text": "60-day money-back guarantee",
+            "icon_alt": "Icon"
+          }
+        },
+        "trust_badge_V9bFEc": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qdczi5qdczi5q.png",
+            "text": "60-day money",
+            "icon_alt": "Icon"
+          }
+        },
+        "trust_badge_HmPnrj": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qd.png",
+            "text": "60-day money-back guarantee",
+            "icon_alt": "Icon"
+          }
+        },
+        "rule_bMwRBt": {
+          "type": "rule",
+          "settings": {
+            "is_default": false,
+            "trip_type": "single",
+            "trip_cost": "lt500",
+            "coverage": "standard",
+            "product": "flight-delay-coverage",
+            "variant_title": "standard",
+            "short_copy": "Compensation for flight delays beyond minimum threshold",
+            "benefit_1": "Simple activation without repeated forms",
+            "benefit_2": "Protects medium value travel bookings",
+            "benefit_3": "",
+            "benefit_4": "",
+            "benefit_5": ""
           }
         },
         "rule_nWGmFL": {
@@ -188,23 +205,6 @@
             "benefit_5": ""
           }
         },
-        "rule_bMwRBt": {
-          "type": "rule",
-          "settings": {
-            "is_default": true,
-            "trip_type": "single",
-            "trip_cost": "lt500",
-            "coverage": "standard",
-            "product": "flight-delay-coverage",
-            "variant_title": "standard",
-            "short_copy": "Compensation for flight delays beyond minimum threshold",
-            "benefit_1": "Simple activation without repeated forms",
-            "benefit_2": "Protects medium value travel bookings",
-            "benefit_3": "",
-            "benefit_4": "",
-            "benefit_5": ""
-          }
-        },
         "rule_ya9c8C": {
           "type": "rule",
           "settings": {
@@ -258,15 +258,15 @@
         }
       },
       "block_order": [
-        "feature_item_rrHQGW",
-        "feature_item_DFfJxW",
-        "feature_item_nr9B6z",
+        "trust_badge_tfNe8e",
+        "trust_badge_V9bFEc",
+        "trust_badge_HmPnrj",
+        "rule_bMwRBt",
         "rule_nWGmFL",
         "rule_f4E8Wt",
         "rule_7iaVUQ",
         "rule_TVb47Y",
         "rule_Uqabde",
-        "rule_bMwRBt",
         "rule_ya9c8C",
         "rule_UUpyPY",
         "rule_8E9KGd"
