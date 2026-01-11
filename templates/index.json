@@ -83,7 +83,7 @@
           "type": "trust_badge",
           "settings": {
             "icon": "shopify://shop_images/Gemini_Generated_Image_zgxgrxzgxgrxzgxg.png",
-            "text": "60-day money-back guarantee",
+            "text": "Trusted by All Users",
             "icon_alt": "Icon"
           }
         },
@@ -91,7 +91,7 @@
           "type": "trust_badge",
           "settings": {
             "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qdczi5qdczi5q.png",
-            "text": "60-day money",
+            "text": "24/7 Global Support",
             "icon_alt": "Icon"
           }
         },
@@ -99,7 +99,7 @@
           "type": "trust_badge",
           "settings": {
             "icon": "shopify://shop_images/Gemini_Generated_Image_zi5qd.png",
-            "text": "60-day money-back guarantee",
+            "text": "Refund Policy Secure",
             "icon_alt": "Icon"
           }
         },
@@ -290,6 +290,9 @@
         "coverage_premium_label": "Premium",
         "coverage_max_label": "Max",
         "benefit_icon": "shopify://shop_images/Vector_22.png",
+        "cta_mode": "go_to_product",
+        "cta_label_add": "Add to cart",
+        "cta_label_go": "View plan details",
         "background_color": "#f7f4ef",
         "card_bg_color": "#ffffff",
         "text_color": "#2b3c5e",

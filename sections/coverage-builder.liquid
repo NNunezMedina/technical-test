@@ -192,9 +192,19 @@
     background: {{ section.settings.selector_active_color }};
     color: #fff;
     }
+
     #{{ section.id }} .cb-atc-btn:disabled{
     opacity:.5;
     cursor:not-allowed;
+    }
+
+    #{{ section.id }} .a-btn {
+      display: block;
+      width:100%;
+      text-decoration:none;
+      text-align:center;
+      margin-top:12px;
+      padding:12px 14px;
     }
 
     #{{ section.id }} .cb-benefits {
@@ -349,18 +359,39 @@
             {% else %}
             {{ section.settings.left_col_text }}
             {% endif %}
-            {% if rec_product and rec_variant %}
-            <form method="post" action="/cart/add" class="cb-atc" data-atc-form>
-              <input type="hidden" name="id" value="{{ rec_variant.id }}" data-atc-variant>
-              <button type="submit" class="cb-atc-btn" data-atc-btn>
-                Add to cart
+            {%- assign cta_mode = section.settings.cta_mode | default: 'add_to_cart' -%}
+
+            {%- if rec_product and rec_variant -%}
+
+              {%- comment -%} CTA: Add to cart {%- endcomment -%}
+              <form
+                method="post"
+                action="/cart/add"
+                class="cb-atc"
+                data-atc-form
+                {% if cta_mode != 'add_to_cart' %}hidden{% endif %}
+              >
+                <input type="hidden" name="id" value="{{ rec_variant.id }}" data-atc-variant>
+                <button type="submit" class="cb-atc-btn" data-atc-btn>
+                  {{ section.settings.cta_label_add }}
+                </button>
+              </form>
+
+              {%- comment -%} CTA: Go to product {%- endcomment -%}
+              <a
+                class="cb-atc-btn a-btn"
+                data-cta
+                href="{{ rec_product.url }}?variant={{ rec_variant.id }}"
+                {% if cta_mode != 'go_to_product' %}hidden{% endif %}
+              >
+                {{ section.settings.cta_label_go }}
+              </a>
+
+            {%- else -%}
+              <button class="cb-atc-btn" disabled>
+                {{ section.settings.cta_label_add | default: 'Add to cart' }}
               </button>
-            </form>
-          {% else %}
-            <button class="cb-atc-btn" disabled>
-              Add to cart
-            </button>
-          {% endif %}
+            {%- endif -%}
           <div class="cb-tb cb-tb--mobile">
           {% render 'trust-badges', items: section.blocks, block_type: 'trust_badge' %}
         </div>
@@ -494,6 +525,7 @@
   variantInput: root.querySelector('[data-atc-variant]'),
   atcBtn: root.querySelector('[data-atc-btn]'),
   atcForm: root.querySelector('[data-atc-form]'),
+  cta: root.querySelector('[data-cta]'),
 };
 
   const getValue = (name) => root.querySelector(`input[name="${name}"]:checked`)?.value;
@@ -575,9 +607,16 @@ const applyDefaultRuleIfAny = () => {
     els.atcBtn.disabled = !rule || !rule.dataset.variantId;
     }
 
+    // Update Go-to-product CTA (always keep it in sync even if hidden)
+    if (els.cta) {
+      const url = rule.dataset.url || '';
+      const vid = rule.dataset.variantId || '';
+      els.cta.href = url ? (vid ? `${url}?variant=${vid}` : url) : '#';
+    }
+
     const benefitsEl = root.querySelector('[data-rec-benefits]');
-if (benefitsEl) {
-  benefitsEl.innerHTML = '';
+    if (benefitsEl) {
+      benefitsEl.innerHTML = '';
 
   const iconUrl = '{{ section.settings.benefit_icon | image_url: width: 32 }}';
 
@@ -603,7 +642,6 @@ if (benefitsEl) {
   }
 }
 
-    // si luego agregas CTA, aquí guardas URL
     root.querySelector('[data-rec]')?.setAttribute('data-url', rule.dataset.url || '');
   };
 
@@ -696,6 +734,32 @@ if (benefitsEl) {
     "type": "image_picker",
     "id": "benefit_icon",
     "label": "Benefit check icon"
+    },
+    {
+      "type": "header",
+      "content": "CTA"
+    },
+    {
+      "type": "select",
+      "id": "cta_mode",
+      "label": "CTA behavior",
+      "default": "add_to_cart",
+      "options": [
+        { "value": "add_to_cart", "label": "Add to cart" },
+        { "value": "go_to_product", "label": "Go to product page" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "cta_label_add",
+      "label": "CTA label (Add to cart)",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "cta_label_go",
+      "label": "CTA label (Go to product)",
+      "default": "View plan details"
     },
     {
       "type": "header",
