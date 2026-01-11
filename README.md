@@ -71,6 +71,32 @@ The Coverage Builder prioritizes a direct recommendation flow; product pages rem
 
 Products are treated as digital items with no shipping or fulfillment logic.
 
+4. Additional Custom Section — Landing Hero
+
+A lightweight custom Hero section was implemented to support landing-style layouts.
+
+Landing Hero Section (Custom):
+
+Configurable background images for desktop and mobile
+
+Editable title and subtitle via Theme Editor
+
+Optional semi-transparent overlay layer to improve text readability
+
+Configurable text alignment (left, center, right)
+
+Two configurable CTA buttons:
+
+Primary CTA supports in-page anchor navigation (e.g. scrolling to the Coverage Builder section)
+
+Secondary CTA can link to any internal or external page (e.g. all products)
+
+Button labels, URLs, colors, and hover states configurable via Theme Editor
+
+Minimal, performance-conscious implementation with no external dependencies
+
+This section is designed to be reusable and upgrade-safe, following Shopify Online Store 2.0 best practices.
+
 How to Test the Coverage Builder
 
 Open any page where the Coverage Builder section is enabled.

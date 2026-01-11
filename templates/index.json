@@ -9,6 +9,31 @@
  */
 {
   "sections": {
+    "landing_hero_GNYGDy": {
+      "type": "landing-hero",
+      "name": "Landing Hero",
+      "settings": {
+        "bg_image_desktop": "shopify://shop_images/RNedqAvxqT9q7dXG.png",
+        "bg_image_mobile": "shopify://shop_images/uNy651IACxE1L5Eu.png",
+        "bg_color": "#0b1220",
+        "text_color": "#ffffff",
+        "title": "On your vacation, keep all the family save",
+        "title_alignment": "left",
+        "enable_overlay": true,
+        "overlay_color": "#121212",
+        "overlay_opacity": 45,
+        "subtitle": "Answer three quick questions to get the best plan for your trip.",
+        "subtitle_color": "#ffffff",
+        "primary_btn_label": "Build my coverage",
+        "primary_btn_url": "#coverage-builder",
+        "secondary_btn_label": "View plan details",
+        "secondary_btn_url": "shopify://collections/all",
+        "min_height_desktop": 560,
+        "min_height_mobile": 460,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -35,6 +60,7 @@
         "heading",
         "button"
       ],
+      "disabled": true,
       "settings": {
         "image_overlay_opacity": 40,
         "image_height": "large",
@@ -74,6 +100,16 @@
         "swipe_on_mobile": false,
         "padding_top": 44,
         "padding_bottom": 36
+      }
+    },
+    "custom_liquid_8yV3Ei": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<section id=\"coverage-builder\">",
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "coverage_builder_igN8a4": {
@@ -128,7 +164,7 @@
             "trip_cost": "gt1500",
             "coverage": "premium",
             "product": "trip-cancellation-insurance",
-            "variant_title": "pro premium",
+            "variant_title": "premium",
             "short_copy": "Enhanced cancellation coverage with higher protection limits",
             "benefit_1": "Solid coverage for planned trips",
             "benefit_2": "Cancellation refunds with valid reasons",
@@ -303,8 +339,10 @@
     }
   },
   "order": [
+    "landing_hero_GNYGDy",
     "image_banner",
     "featured_collection",
+    "custom_liquid_8yV3Ei",
     "coverage_builder_igN8a4"
   ]
 }

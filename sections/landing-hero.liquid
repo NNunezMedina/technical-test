@@ -1,0 +1,296 @@
+  <style>
+  #{{ section.id }}.landing-hero {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+    {% if section.settings.bg_image_desktop != blank %}
+      background-image: url('{{ section.settings.bg_image_desktop | image_url: width: 2500 }}');
+    {% endif %}
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: {{ section.settings.min_height_desktop }}px;
+    display: flex;
+    align-items: center;
+    justify-content:
+    {% if section.settings.title_alignment == 'center' %}
+      center
+    {% elsif section.settings.title_alignment == 'right' %}
+      flex-end
+    {% else %}
+      flex-start
+    {% endif %};
+    position: relative;
+    overflow: hidden;
+  }
+
+  #{{ section.id }}.landing-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: {{ section.settings.overlay_color }};
+  opacity: {% if section.settings.enable_overlay %}{{ section.settings.overlay_opacity | divided_by: 100.0 }}{% else %}0{% endif %};
+  pointer-events: none;
+  z-index: 0;
+  }
+
+  #{{ section.id }} .landing-hero__content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 68px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+    #{{ section.id }} .landing-hero__title {
+    margin: 0;
+    font-size: 44px;
+    line-height: 1.1;
+    font-weight: 700;
+    color: {{ section.settings.text_color }};
+    text-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    text-align: {{ section.settings.title_alignment }};
+    max-width:480px;
+    }
+
+    #{{ section.id }} .landing-hero__subtitle {
+    margin: 12px 0 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: {{ section.settings.subtitle_color }};
+    text-align: {{ section.settings.title_alignment }};
+    max-width: 520px;
+    }
+
+    #{{  section.id }} .landing-hero__actions {
+        display:flex;
+        gap:16px;
+        margin-top:20px;
+    }
+
+    #{{ section.id }} .landing-hero__btn {
+        background:black;
+        padding:10px 16px;
+        text-decoration:none;
+        color:white;
+        border-radius:16px;
+        display:flex;
+        justify-content:center;
+    }
+
+    #{{ section.id }} .landing-hero__btn--primary:hover {
+        background:white;
+        color:black;
+    }
+
+    #{{ section.id }} .landing-hero__btn--secondary {
+        background:none;
+        padding:10px 16px;
+        text-decoration:none;
+        color:white;
+        border-radius:16px;
+        border:1px solid white;
+    }
+
+    #{{ section.id }} .landing-hero__btn--secondary:hover {
+        background:white;
+        color:black;
+    }
+
+  @media (max-width: 768px) {
+    #{{ section.id }}.landing-hero {
+      {% if section.settings.bg_image_mobile != blank %}
+        background-image: url('{{ section.settings.bg_image_mobile | image_url: width: 1200 }}');
+      {% elsif section.settings.bg_image_desktop != blank %}
+        background-image: url('{{ section.settings.bg_image_desktop | image_url: width: 1200 }}');
+      {% endif %}
+
+      min-height: {{ section.settings.min_height_mobile }}px;
+    }
+
+    #{{ section.id }} .landing-hero__title {
+      font-size: 32px;
+    }
+
+    #{{ section.id }} .landing-hero__content {
+    padding: 0 20px;
+  }
+
+  #{{  section.id }} .landing-hero__actions {
+        flex-direction:column;
+        max-width:200px;
+    }
+  }
+</style>
+
+<section id="{{ section.id }}" class="landing-hero">
+  <div class="landing-hero__content">
+
+    {% if section.settings.title != blank %}
+      <h1 class="landing-hero__title">
+        {{ section.settings.title }}
+      </h1>
+    {% endif %}
+
+    {% if section.settings.subtitle != blank %}
+      <p class="landing-hero__subtitle">
+        {{ section.settings.subtitle }}
+      </p>
+    {% endif %}
+
+    {%- liquid
+    assign has_primary = false
+    assign has_secondary = false
+
+    if section.settings.primary_btn_label != blank and section.settings.primary_btn_url != blank
+        assign has_primary = true
+    endif
+
+    if section.settings.secondary_btn_label != blank and section.settings.secondary_btn_url != blank
+        assign has_secondary = true
+    endif
+    -%}
+
+    {%- if has_primary or has_secondary -%}
+    <div class="landing-hero__actions">
+        {%- if has_primary -%}
+        <a class="landing-hero__btn landing-hero__btn--primary" href="{{ section.settings.primary_btn_url }}">
+            {{ section.settings.primary_btn_label }}
+        </a>
+        {%- endif -%}
+
+        {%- if has_secondary -%}
+        <a class="landing-hero__btn landing-hero__btn--secondary" href="{{ section.settings.secondary_btn_url }}">
+            {{ section.settings.secondary_btn_label }}
+        </a>
+        {%- endif -%}
+    </div>
+    {%- endif -%}
+  </div>
+</section>
+
+ {% schema %}
+{
+  "name": "Landing Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "bg_image_desktop",
+      "label": "Background image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image_mobile",
+      "label": "Background image (mobile)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#0b1220"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Title color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Find the right travel coverage in seconds"
+    },
+    {
+    "type": "select",
+    "id": "title_alignment",
+    "label": "Title alignment",
+    "default": "left",
+    "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+    ]
+    },
+    {
+    "type": "checkbox",
+    "id": "enable_overlay",
+    "label": "Enable overlay layer",
+    "default": true
+    },
+    {
+    "type": "color",
+    "id": "overlay_color",
+    "label": "Overlay color",
+    "default": "#ffffff"
+    },
+    {
+    "type": "range",
+    "id": "overlay_opacity",
+    "label": "Overlay opacity",
+    "min": 0,
+    "max": 90,
+    "step": 5,
+    "default": 35,
+    "unit": "%"
+    },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Answer 3 quick questions to get the best plan for your trip." },
+    {
+    "type": "color",
+    "id": "subtitle_color",
+    "label": "Subtitle color",
+    "default": "#ffffff"
+    },
+    { "type": "text", "id": "primary_btn_label", "label": "Primary button label", "default": "Build my coverage" },
+    { "type": "url", "id": "primary_btn_url", "label": "Primary button link" },
+    { "type": "text", "id": "secondary_btn_label", "label": "Secondary button label", "default": "View plan details" },
+    { "type": "url", "id": "secondary_btn_url", "label": "Secondary button link" },
+    {
+      "type": "range",
+      "id": "min_height_desktop",
+      "label": "Min height (desktop)",
+      "min": 240,
+      "max": 900,
+      "step": 20,
+      "default": 420,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Min height (mobile)",
+      "min": 200,
+      "max": 700,
+      "step": 20,
+      "default": 320,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 8,
+      "default": 64,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 8,
+      "default": 64,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Landing Hero"
+    }
+  ]
+}
+{% endschema %}
