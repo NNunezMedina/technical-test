@@ -9,31 +9,6 @@
  */
 {
   "sections": {
-    "landing_hero_GNYGDy": {
-      "type": "landing-hero",
-      "name": "Landing Hero",
-      "settings": {
-        "bg_image_desktop": "shopify://shop_images/RNedqAvxqT9q7dXG.png",
-        "bg_image_mobile": "shopify://shop_images/uNy651IACxE1L5Eu.png",
-        "bg_color": "#0b1220",
-        "text_color": "#ffffff",
-        "title": "On your vacation, keep all the family save",
-        "title_alignment": "left",
-        "enable_overlay": true,
-        "overlay_color": "#121212",
-        "overlay_opacity": 45,
-        "subtitle": "Answer three quick questions to get the best plan for your trip.",
-        "subtitle_color": "#ffffff",
-        "primary_btn_label": "Build my coverage",
-        "primary_btn_url": "#coverage-builder",
-        "secondary_btn_label": "View plan details",
-        "secondary_btn_url": "shopify://collections/all",
-        "min_height_desktop": 560,
-        "min_height_mobile": 460,
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
     "image_banner": {
       "type": "image-banner",
       "blocks": {
@@ -72,6 +47,22 @@
         "stack_images_on_mobile": false,
         "mobile_content_alignment": "center",
         "show_text_below": false
+      }
+    },
+    "landing_hero_wEKeTw": {
+      "type": "landing-hero",
+      "name": "Hero Diagonal (Basic)",
+      "settings": {
+        "image_desktop": "shopify://shop_images/WhatsApp_Image_2026-01-11_at_7.04.03_PM_1.jpg",
+        "image_mobile": "shopify://shop_images/WhatsApp_Image_2026-01-11_at_7.04.03_PM_1.jpg",
+        "title": "Travel with peace of mind, wherever you go.",
+        "title_color": "#2b3c5e",
+        "subtitle": "Medical emergencies, trip cancellations, delays and more - covered wordlwide.",
+        "subtitle_color": "#2b3c5e",
+        "primary_cta_label": "Buil your Coverage",
+        "primary_cta_url": "#coverage-builder",
+        "secondary_cta_label": "See all Plans",
+        "secondary_cta_url": "shopify://collections/all"
       }
     },
     "featured_collection": {
@@ -339,8 +330,8 @@
     }
   },
   "order": [
-    "landing_hero_GNYGDy",
     "image_banner",
+    "landing_hero_wEKeTw",
     "featured_collection",
     "custom_liquid_8yV3Ei",
     "coverage_builder_igN8a4"
