@@ -74,10 +74,6 @@
     max-width: 470px;
   }
 
-  #{{  section.id}} .lh__title-overlay {
-    display:none;
-  }
-
   #{{ section.id }} .lh__subtitle{
     font-size: 16px;
     line-height: 1.5;
@@ -136,33 +132,25 @@
     grid-template-columns: 1fr;
   }
 
-    /* oculta el overlay que solo tiene título */
-    #{{ section.id }} .lh__title-overlay{
-      display: none !important;
-    }
-
-    /* convierte el panel en overlay dentro de la imagen */
     #{{ section.id }} .lh__media{
-      position: relative; /* necesario para el overlay */
+      position: relative;
     }
 
     #{{ section.id }} .lh__panel{
       position: absolute;
       inset: auto;
-      margin-left: 0;      /* quita el overlap de desktop */
+      margin-left: 0;
       background: transparent;
       display: flex;
-      align-items: center; /* panel abajo como tu ejemplo */
-      padding: 16px;         /* margen interno del overlay */
+      align-items: center;
+      padding: 16px;
       height:500px;
     }
 
-    /* apaga la diagonal */
     #{{ section.id }} .lh__panel::before{
       display: none;
     }
 
-    /* caja blanca/traslúcida del contenido */
     #{{ section.id }} .lh__content{
       width: 100%;
       margin-left: 0;
@@ -172,7 +160,6 @@
       border-radius:16px;
     }
 
-    /* tipografía mobile */
     #{{ section.id }} .lh__title{
       font-size: 30px;
     }
